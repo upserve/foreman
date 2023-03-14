@@ -149,7 +149,7 @@ class Foreman::Engine
   def register(name, command, options={})
     options[:env] ||= env
     options[:cwd] ||= File.dirname(command.split(" ").first)
-    command = [@options[:prefix], command].join(' ') if @options[:prefix]
+    command = [ERB.new(@options[:prefix]).result(binding), command].join(' ') if @options[:prefix]
     process = Foreman::Process.new(command, options)
     @names[process] = name
     @processes << process
